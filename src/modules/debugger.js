@@ -28,9 +28,29 @@ const Debugger = (() => {
         };
     }
 
+    function refresh(){
+        (async () => {
+            try {
+                if ("serviceWorker" in navigator) {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(regs.map(r => r.unregister()));
+                    log("Service worker unregistered.");
+                }
+                if ("caches" in window) {
+                    const names = await caches.keys();
+                    await Promise.all(names.map(n => caches.delete(n)));
+                    log("Caches cleared.");
+                }
+            } finally {
+                window.location.reload();
+            }
+        })();
+    }
+
     return{
         debugMessage,
-        log
+        log,
+        refresh
     }
 })();
 

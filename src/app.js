@@ -64,6 +64,7 @@ class App{
 }
 
 addEventListener("DOMContentLoaded", () => {
+    window.Debugger = Debugger;
     const app = new App();
     app.init();
 })
